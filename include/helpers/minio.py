@@ -9,4 +9,3 @@ def get_minio_client():
         secret_key=minio['aws_secret_access_key'],
         secure=False
     )
-    return client
