@@ -78,6 +78,18 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - ndsnet
+  spark-driver:
+    image: airflow/stock-app
+    build: ./spark/driver
+    depends_on:
+      - spark-master
+      - minio
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+      SPARK_APPLICATION_ARGS: stock-market/AAPL
+    networks:
+      - ndsnet
 
 networks:
   ndsnet:
