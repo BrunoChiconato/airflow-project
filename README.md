@@ -16,7 +16,7 @@ By completing hands-on exercises and quizzes at each section, I reinforced best 
 
 ## Stock Market Project Overview
 
-**Stock Market Project** is an end-to-end data orchestration project built with Apache Airflow, Docker, Spark, MinIO, PostgreSQL, and Metabase. It ingests stock data from the Yahoo Finance API, processes and stores it, and visualizes key metrics and trends for Apple Inc. via a Metabase dashboard. Upon successful completion, a Slack notification is sent to your team.
+**Stock Market Project** is an end-to-end data orchestration project built with Apache Airflow, Docker, Spark, MinIO, PostgreSQL, and Metabase. It ingests stock data from the Yahoo Finance API, processes and stores it, and visualizes key metrics and trends for NVIDIA via a Metabase dashboard. Upon successful completion, a Slack notification is sent to your team.
 
 ## Objectives
 
@@ -67,7 +67,7 @@ By completing hands-on exercises and quizzes at each section, I reinforced best 
 
   * **Average Close Price**
   * **Average Volume**
-  * **Time-series chart** of Close and Volume for Apple Inc.
+  * **Time-series chart** of Close and Volume for NVIDIA.
 
 ### 7. Slack Notifications
 
@@ -77,9 +77,11 @@ By completing hands-on exercises and quizzes at each section, I reinforced best 
 
 The Metabase dashboard provides:
 
-* **Average Close Price** of Apple over the last year
+* **Average Close Price** of NVIDIA over the last year
 * **Average Volume** traded
 * **Time-series visualization** of daily Close and Volume trends
+
+![Stock Dashboard](./pics/metabase-dashboard.png)
 
 ## Getting Started
 
@@ -114,3 +116,22 @@ The Metabase dashboard provides:
 
    * Unpause the `stock_market` DAG in Airflow and trigger a run.
    * Watch task logs and await the Slack notification for completion.
+
+6. **Metabase Dashboard**
+
+   Since the Docker persistent data was not committed, the example dashboard will not be available by default. If you wish to create your own dashboard, follow the steps below:
+
+   1. Open your browser and go to [http://localhost:3000/](http://localhost:3000/).
+
+   2. Complete the initial setup steps in Metabase with any values **except** during the **"Add your data"** step. At that point, choose **PostgreSQL** and enter the following database connection details:
+
+      * **Display name**: e.g., `DW`
+      * **Host**: `postgres`
+      * **Port**: `5432`
+      * **Username**: `postgres`
+      * **Password**: `postgres`
+      * **Schemas**: Select **All**
+
+   3. Click **"Connect database"**. The connection must be successful before continuing to the Metabase interface.
+
+   4. After the connection is established, you will be directed to the Metabase dashboard panel. From here, you can explore your data and build custom dashboards using your own metrics and visualizations.
