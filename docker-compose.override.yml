@@ -67,8 +67,10 @@ services:
     volumes:
       - ./include/data/metabase:/metabase-data
     networks:
-      - ndsnet
-      - airflow
+      ndsnet: {}
+      airflow:
+        aliases:
+          - postgres
 
   docker-proxy:
     image: alpine/socat
