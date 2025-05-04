@@ -1,11 +1,11 @@
 from airflow.decorators import dag, task
 from airflow.sensors.base import PokeReturnValue
 from airflow.hooks.base import BaseHook
-from airflow.operators.python import PythonOperator
-from airflow.providers.docker.operators.docker import DockerOperator
-from astro import sql as aql
-from astro.files import File
-from astro.sql.table import Table, Metadata
+from airflow.operators.python import PythonOperator # type: ignore
+from airflow.providers.docker.operators.docker import DockerOperator # type: ignore
+from astro import sql as aql # type: ignore
+from astro.files import File # type: ignore
+from astro.sql.table import Table, Metadata # type: ignore
 from datetime import datetime
 import requests
 
