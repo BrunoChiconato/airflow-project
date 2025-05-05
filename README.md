@@ -85,15 +85,70 @@ The Metabase dashboard provides:
 
 ## Getting Started
 
+### Prerequisites
+
+* **Astro CLI** installed
+  Install from [Astro’s official docs](https://www.astronomer.io/docs/astro/cli/overview/).
+* **Docker** installed and running
+* **System requirements**
+
+  * ≥ 8 GB RAM allocated to Docker (Spark jobs require substantial memory)
+  * Sufficient disk space for Docker images
+* **Platform**: The provided `docker-compose.yml` is configured for Linux hosts.
+
+### Setup & Run
+
 1. **Clone the repository**
    ```bash
    git clone https://github.com/BrunoChiconato/airflow-project.git
    cd airflow-project
    ```
 
-2. **Configure Airflow Connections via the Web UI**
+2. **Ensure Astro is stopped**
 
-   Open the Airflow UI at [http://localhost:8080](http://localhost:8080). Navigate to **Admin > Connections**. Click the **"+"** icon to add the following connections:
+   ```bash
+   astro dev stop
+   ```
+
+3. **Build Docker images**
+
+   ```bash
+   # Spark master
+   cd spark/master
+   docker build -t airflow/spark-master .
+
+   # Spark worker
+   cd ../worker
+   docker build -t airflow/spark-worker .
+
+   # Stock-transform app
+   cd ../notebooks/stock_transform
+   docker build -t airflow/stock-app .
+   ```
+
+4. **Return to project root**
+
+   ```bash
+   cd ../../../
+   ```
+
+5. **Start your environment**
+
+   ```bash
+   astro dev start
+   ```
+
+6. **Verify in Airflow UI**
+
+   * Open: [http://localhost:8080](http://localhost:8080)
+   * Log in with:
+
+     * **Username:** `admin`
+     * **Password:** `admin`
+
+7. **Configure Airflow Connections**
+
+   Navigate to **Admin > Connections**. Click the **"+"** icon to add the following connections:
 
    #### `stock_api`
 
@@ -140,18 +195,12 @@ The Metabase dashboard provides:
    * **Connection Type:** `Slack API`
    * **Slack API Token:** *You must create and provide a valid token*
 
-3. **Launch the stack**
-
-   ```bash
-   docker-compose up -d
-   ```
-
-4. **Trigger and Monitor**
+8. **Trigger and Monitor**
 
    * Unpause the `stock_market` DAG in Airflow and trigger a run.
    * Watch task logs and await the Slack notification for completion.
 
-5. **Metabase Dashboard**
+0. **Metabase Dashboard**
 
    Since the Docker persistent data was not committed, the example dashboard will not be available by default. If you wish to create your own dashboard, follow the steps below:
 
@@ -169,3 +218,9 @@ The Metabase dashboard provides:
    3. Click **"Connect database"**. The connection must be successful before continuing to the Metabase interface.
 
    4. After the connection is established, you will be directed to the Metabase dashboard panel. From here, you can explore your data and build custom dashboards using your own metrics and visualizations.
+
+### Troubleshooting
+
+* Make sure no other services are listening on the ports defined in `docker-compose.yml` (e.g., 8080, 5432, 9000).
+* If you run into memory issues, increase Docker’s RAM allocation to ≥ 8 GB.
+* On non-Linux hosts, adjustments to volume mounts or networking settings may be required.
