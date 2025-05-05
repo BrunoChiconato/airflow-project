@@ -91,12 +91,54 @@ The Metabase dashboard provides:
    cd airflow-project
    ```
 
-2. **Configure Airflow Connections**
+2. **Configure Airflow Connections via the Web UI**
 
-   * **stock\_api** (HTTP): `https://query1.finance.yahoo.com`
-   * **minio\_conn** (S3): endpoint, access key, secret key
-   * **postgres\_dw** (Postgres): host, user, password, database
-   * **slack\_webhook** (HTTP): Slack incoming webhook URL
+   Open the Airflow UI at [http://localhost:8080](http://localhost:8080). Navigate to **Admin > Connections**. Click the **"+"** icon to add the following connections:
+
+   #### `stock_api`
+
+   * **Connection ID:** `stock_api`
+   * **Connection Type:** `HTTP`
+   * **Host:** `https://query1.finance.yahoo.com`
+   * **Extra:**
+
+   ```json
+   {
+      "endpoint": "/v8/finance/chart/",
+      "headers": {
+         "Content-Type": "application/json",
+         "User-Agent": "Mozilla/5.0",
+         "Accept": "application/json"
+      }
+   }
+   ```
+
+   #### `minio`
+
+   * **Connection ID:** `minio`
+   * **Connection Type:** `Amazon Web Services`
+   * **AWS Access Key ID:** `minio`
+   * **Extra:**
+
+   ```json
+   {
+      "endpoint_url": "http://minio:9000"
+   }
+   ```
+
+   #### `postgres`
+
+   * **Connection ID:** `postgres`
+   * **Connection Type:** `Postgres`
+   * **Host:** `postgres`
+   * **Login:** `postgres`
+   * **Port:** `5432`
+
+   #### `slack`
+
+   * **Connection ID:** `slack`
+   * **Connection Type:** `Slack API`
+   * **Slack API Token:** *You must create and provide a valid token*
 
 3. **Launch the stack**
 
@@ -104,20 +146,12 @@ The Metabase dashboard provides:
    docker-compose up -d
    ```
 
-4. **Access the services**
-
-   * Airflow UI: `http://localhost:8080`
-   * MinIO Console: `http://localhost:9001`
-   * Spark UI: `http://localhost:4040`
-   * PostgreSQL (psql): port `5432`
-   * Metabase: `http://localhost:3000`
-
-5. **Trigger and Monitor**
+4. **Trigger and Monitor**
 
    * Unpause the `stock_market` DAG in Airflow and trigger a run.
    * Watch task logs and await the Slack notification for completion.
 
-6. **Metabase Dashboard**
+5. **Metabase Dashboard**
 
    Since the Docker persistent data was not committed, the example dashboard will not be available by default. If you wish to create your own dashboard, follow the steps below:
 
