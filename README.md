@@ -87,8 +87,8 @@ The Metabase dashboard provides:
 
 ### Prerequisites
 
-* **Astro CLI** installed
-  Install from [Astro’s official docs](https://www.astronomer.io/docs/astro/cli/overview/).
+* **Astro CLI** installed.
+  See [Astro’s official docs](https://www.astronomer.io/docs/astro/cli/install-cli)
 * **Docker** installed and running
 * **System requirements**
 
