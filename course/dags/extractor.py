@@ -1,26 +1,9 @@
 from airflow.decorators import dag
 from airflow.operators.python import PythonOperator # type: ignore
-from airflow.datasets import Dataset
 from pendulum import datetime
 
-import requests
-
-
-DATASET_COCKTAIL = Dataset('/tmp/cocktail.json')
-
-def _get_cocktail(ti=None):
-    api = 'https://www.thecocktaildb.com/api/json/v1/1/random.php'
-    response = requests.get(api)
-
-    with open(DATASET_COCKTAIL.uri, 'wb') as f:
-        f.write(response.content)
-
-    ti.xcom_push(key='request_size', value=len(response.content))
-
-
-def _check_size(ti=None):
-    size = ti.xcom_pull(key='request_size', task_ids='get_cocktail')
-    print(size)
+from include.datasets import DATASET_COCKTAIL
+from include.tasks import _check_size, _get_cocktail
 
 
 @dag(

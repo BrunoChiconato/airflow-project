@@ -1,10 +1,9 @@
 from airflow.decorators import dag
 from airflow.operators.empty import EmptyOperator # type: ignore
-from airflow.datasets import Dataset
 from pendulum import datetime, duration
 
+from include.datasets import DATASET_COCKTAIL
 
-DATASET_COCKTAIL = Dataset('./tmp/cocktail.json')
 
 @dag(
     start_date=datetime(2025, 1, 1),
