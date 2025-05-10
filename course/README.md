@@ -4,7 +4,7 @@ I enrolled in *“Apache Airflow: The Hands-On Guide”*, an A-to-Z course taugh
 
 ## Throughout the course, I:
 - Learned Airflow fundamentals — how the scheduler, web server, and metadata database interact.
-- Built the Forex Data Pipeline, exploring HTTP, Spark, Hadoop, Slack integrations, and more.
+- Built the Stock Market Data Pipeline, exploring HTTP, Spark, Hadoop, Slack integrations, and more.
 - Mastered DAG design: timezones, catchup, unit testing, folder structure, subDAGs, cross-DAG dependencies, and deadlock avoidance.
 - Scaled Airflow with Local, Celery, and Kubernetes Executors; specialized workers; handled node failures; and ran a 3-node Rancher cluster locally.
 - Templated DAGs, implemented DAG dependencies, and deep-dived into advanced concepts like SubDAGs and deadlocks.
