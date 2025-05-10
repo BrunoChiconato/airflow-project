@@ -1,9 +1,13 @@
-from airflow.decorators import dag
+from airflow.decorators import dag, task_group
 from airflow.operators.python import PythonOperator # type: ignore
 from pendulum import datetime, duration
 
 from include.datasets import DATASET_COCKTAIL
-from include.tasks import _check_size, _get_cocktail
+from include.tasks import (
+    _check_size,
+    _get_cocktail,
+    _validate_cocktail_fields
+)
 from include.extractor.callbacks import (
     _handle_failed_dag_run,
     _handle_empty_size
@@ -32,11 +36,24 @@ def extractor():
         max_retry_delay=duration(minutes=15)
     )
 
-    check_size = PythonOperator(
-        task_id = 'check_size',
-        python_callable = _check_size
+    @task_group(
+        default_args = {
+            'retries': 3
+        }
     )
+    def checks():
+        check_size = PythonOperator(
+            task_id = 'check_size',
+            python_callable = _check_size
+        )
 
-    get_cocktail >> check_size
+        validate_fields = PythonOperator(
+            task_id = 'validate_fields',
+            python_callable = _validate_cocktail_fields
+        )
+
+        check_size >> validate_fields
+
+    get_cocktail >> checks()
 
 extractor()
