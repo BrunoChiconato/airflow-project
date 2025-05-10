@@ -1,4 +1,5 @@
 import requests
+from airflow.exceptions import AirflowFailException
 
 from include.datasets import DATASET_COCKTAIL
 
@@ -15,4 +16,5 @@ def _get_cocktail(ti=None):
 
 def _check_size(ti=None):
     size = ti.xcom_pull(key='request_size', task_ids='get_cocktail')
-    print(size)
+    if size <= 0:
+        raise AirflowFailException

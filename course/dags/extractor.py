@@ -18,7 +18,8 @@ from include.extractor.callbacks import (
     default_args={
         'retries': 2,
         'retry_delay': duration(seconds=2)
-    }
+    },
+    tags=['ecom']
 )
 def extractor():
 
