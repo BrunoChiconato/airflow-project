@@ -1,4 +1,5 @@
-from airflow.decorators import dag, task_group
+import json
+from airflow.decorators import dag, task_group, task
 from airflow.operators.python import PythonOperator # type: ignore
 from pendulum import datetime, duration
 
@@ -36,6 +37,7 @@ def extractor():
         max_retry_delay=duration(minutes=15)
     )
 
+
     @task_group(
         default_args = {
             'retries': 3
@@ -54,6 +56,27 @@ def extractor():
 
         check_size >> validate_fields
 
-    get_cocktail >> checks()
+
+    @task.branch()
+    def branch_cocktail_type():
+        with open(DATASET_COCKTAIL.uri, 'r') as f:
+            data = json.load(f)
+
+        if data['drinks'][0]['strAlcoholic'] == 'Alcoholic':
+            return 'alcoholic_drink'
+
+        return 'non_alcoholic_drink'
+
+
+    @task()
+    def alcoholic_drink():
+        print('Alcoholic')
+
+
+    @task()
+    def non_alcoholic_drink():
+        print('Non Alcoholic')
+
+    get_cocktail >> checks() >> branch_cocktail_type() >> [alcoholic_drink(), non_alcoholic_drink()]
 
 extractor()
