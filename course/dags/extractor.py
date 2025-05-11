@@ -1,6 +1,9 @@
 import json
+import os
+
 from airflow.decorators import dag, task_group, task
 from airflow.operators.python import PythonOperator # type: ignore
+from airflow.utils.trigger_rule import TriggerRule
 from pendulum import datetime, duration
 
 from include.datasets import DATASET_COCKTAIL
@@ -77,6 +80,14 @@ def extractor():
     def non_alcoholic_drink():
         print('Non Alcoholic')
 
-    get_cocktail >> checks() >> branch_cocktail_type() >> [alcoholic_drink(), non_alcoholic_drink()]
+
+    @task(trigger_rule = TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS)
+    def clean_data():
+        if os.path.exists(DATASET_COCKTAIL.uri):
+            os.remove(DATASET_COCKTAIL)
+        else:
+            print('File does not exist')
+
+    get_cocktail >> checks() >> branch_cocktail_type() >> [alcoholic_drink(), non_alcoholic_drink()] >> clean_data()
 
 extractor()
