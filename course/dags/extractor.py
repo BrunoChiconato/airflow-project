@@ -83,7 +83,10 @@ def extractor():
 
     @task(
         trigger_rule = TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS,
-        templates_dict={'the_current_date': '{{ ds }}'}
+        templates_dict = {
+            'the_current_date': '{{ ds }}',
+            'api': '{{ var.value.API }}'
+        }
     )
     def clean_data(templates_dict):
         if os.path.exists(DATASET_COCKTAIL.uri):
@@ -91,6 +94,7 @@ def extractor():
         else:
             print('File does not exist')
         print(f'Data cleaned for the data {templates_dict['the_current_date']}')
+        print(f'API: {templates_dict['api'] }')
 
     get_cocktail >> checks() >> branch_cocktail_type() >> [alcoholic_drink(), non_alcoholic_drink()] >> clean_data()
 
