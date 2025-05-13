@@ -1,12 +1,13 @@
 import requests
 import json
 from airflow.exceptions import AirflowFailException
+from airflow.models import Variable
 
 from include.datasets import DATASET_COCKTAIL
 
 
 def _get_cocktail(ti=None):
-    api = 'https://www.thecocktaildb.com/api/json/v1/1/random.php'
+    api = Variable.get('API')
     response = requests.get(api)
 
     with open(DATASET_COCKTAIL.uri, 'wb') as f:
