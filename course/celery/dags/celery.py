@@ -7,25 +7,25 @@ from time import sleep
 def celery():
 
     @task
-    def a():
+    def a(queue="cpu"):
         print("A")
         sleep(15)
 
 
     @task
-    def b():
+    def b(queue="gpu"):
         print("B")
         sleep(15)
 
 
     @task
-    def c():
+    def c(queue="cpu"):
         print("C")
         sleep(15)
 
 
     @task
-    def d():
+    def d(queue="cpu"):
         print("D")
         sleep(15)
 
