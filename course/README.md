@@ -22,7 +22,6 @@ This folder (`airflow-project/course/`) contains all the hands-on examples and e
 - **Stock Market Data Pipeline:** HTTP, Spark, Hadoop & Slack integrations
 - **DAG Design:** timezones, catchup, folder structure, subDAGs, cross-DAG dependencies & deadlock avoidance
 - **Executors:** Local & Celery setups, specialized workers, node-failure handling
-- **Deploy:** AWS EKS cluster with Rancher for cloud-based KubernetesExecutor runs
 - **Templating & Advanced Patterns:** Jinja templates, dynamic DAGs, SubDAGs & deadlocks
 - **Dataset-Triggered Scheduling:** launch DAG runs via Airflow Datasets
 - **Monitoring:** Elasticsearch & Grafana dashboards
